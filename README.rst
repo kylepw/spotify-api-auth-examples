@@ -77,7 +77,7 @@ Usage
 
 2. Open the address listed in a browser.
 
-3. Click the sign-in button and authorize the application.
+3. Click the `Login with Spotify` button and authorize the application.
 
 License
 -------
