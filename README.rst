@@ -16,7 +16,7 @@ The *client credentials flow* example includes a search function that
 lists artist information from Spotify.
 
 .. image:: screenshots/search.png
-	:width: 80%
+	:width: 60%
 
 For details on authorization flows, see `Spotify's Authorization Guide`__
 
