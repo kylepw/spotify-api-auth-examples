@@ -1,0 +1,103 @@
+<!----------------------------------------------
+Based off of implicit grant flow example in:
+https://github.com/spotify/web-api-auth-examples
+------------------------------------------------>
+
+{% extends "base.html" %}
+{% block title %}Spotify Implicit Grant Flow Example{% endblock %}
+{% block header %}Spotify - Implicit Grant Flow Example{% endblock %}
+{% block content %}
+<div id="user-profile">
+</div>
+<div id="oauth">
+</div>
+
+{% raw %}
+<script id="user-profile-template" type="text/x-handlebars-template">
+  <h2>Logged in as {{display_name}}</h2>
+  <div class="media">
+    <div class="mr-5">
+      <img class="media-object" width="150" src="{{images.0.url}}" />
+    </div>
+    <div class="media-body">
+      <dl class="dl-horizontal">
+        <dt>Display name</dt><dd>{{display_name}}</dd>
+        <dt>Id</dt><dd>{{id}}</dd>
+        <dt>Email</dt><dd>{{email}}</dd>
+        <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
+        <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
+        <dt>Profile Image</dt><dd><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
+        <dt>Country</dt><dd>{{country}}</dd>
+      </dl>
+    </div>
+  </div>
+</script>
+{% endraw %}
+
+{% raw %}
+<script id="oauth-template" type="text/x-handlebars-template">
+  <h3>oAuth info</h3>
+  <dl class="dl-horizontal">
+    <dt>Access token</dt><dd class="text-truncate">{{access_token}}</dd>
+  </dl>
+</script>
+{% endraw %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
+<script>
+  /**
+   * Parse fragment identifier parameters.
+   * @return Object
+   */
+  function getHashParams() {
+    let hash = window.location.hash.substr(1).split('&');
+    let params = {};
+    hash.map(h => {
+      let [key, val] = h.split('=');
+      params[key] = decodeURIComponent(val);
+    });
+
+    return params;
+  }
+
+  /**
+   * Request and display profile data.
+   * @return undefined
+   */
+  function showProfile() {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var response = JSON.parse(this.responseText)
+        userProfilePlaceholder.innerHTML = userProfileTemplate(response);
+      }
+    }
+
+    xhttp.open('GET', 'https://api.spotify.com/v1/me', true);
+
+    xhttp.setRequestHeader('Authorization', 'Bearer ' + access_token)
+    xhttp.send();
+  }
+
+  // Handlebars templates
+  var userProfileSource = document.getElementById('user-profile-template').innerHTML,
+      userProfileTemplate = Handlebars.compile(userProfileSource),
+      userProfilePlaceholder = document.getElementById('user-profile');
+
+      oauthSource = document.getElementById('oauth-template').innerHTML,
+      oauthTemplate = Handlebars.compile(oauthSource),
+      oauthPlaceholder = document.getElementById('oauth');
+
+  var params = getHashParams();
+  var access_token = params.access_token
+
+  if (access_token) {
+    // Display oauth and profile info.
+    oauthPlaceholder.innerHTML = oauthTemplate(params);
+    showProfile();
+  } else {
+    document.getElementById('user-profile').innerHTML = 'No user profile data to display. Access token may have expired.'
+  }
+</script>
+{% endblock %}

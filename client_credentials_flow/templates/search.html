@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}Spotify Artist Search{% endblock %}
+{% block header %}Spotify Artist Search{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-4 mb-2">
+    <input type="text" id="artist" class="form-control" placeholder="Artist" aria-label="Search">
+  </div>
+  <div class="col">
+    <button type="button" id="id_button" class="btn btn-primary"  onclick="getResults()">Search</button>
+  </div>
+</div>
+
+<div id="total" class="text-muted small mt-1 ml-2">
+</div>
+
+<div id="results" class="mt-5">
+</div>
+
+{% raw %}
+<script id="result-template" type="text/x-handlebars-template">
+  <!-- '.' below is necessary to access each object in the array -->
+  {{#each .}}
+  <div class="media fadeitin">
+    <div class="mr-4">
+        <a href="{{external_urls.spotify}}" target="_blank"><img class="media-object" width="150" src="{{images.0.url}}" /></a>
+    </div>
+    <div class="media-body">
+      <h4><a class="text-dark nounderline" href="{{external_urls.spotify}}" target="_blank">{{name}}</a></h4>
+      <dl class="dl-horizontal">
+        <dt>Id</dt><dd>{{id}}</dd>
+        <dt>Type</dt><dd>{{type}}</dd>
+        <dt>Genres</dt><dd>{{genres}}</dd>
+        <dt>Popularity</dt><dd>{{popularity}}</dd>
+        <dt>Followers</dt><dd>{{followers.total}}</dd>
+        <dt>Spotify Url</dt><dd><a href="{{external_urls.spotify}}" target="_blank">{{external_urls.spotify}}</a></dd>
+      </dl>
+    </div>
+  </div>
+  {{/each}}
+</script>
+{% endraw %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
+<script>
+  (function() {
+
+    // Handlebars templates
+    var resultSource = document.getElementById('result-template').innerHTML,
+        resultTemplate = Handlebars.compile(resultSource),
+        resultPlaceholder = document.getElementById('results');
+
+    // JSON object of search results
+    var res_json;
+
+    // Count number of results displayed
+    var resultCounter = 0;
+
+
+  /**
+    * Pressing enter in input box also triggers search
+    */
+    document.getElementById("artist")
+      .addEventListener("keyup", function(event) {
+      event.preventDefault();
+      if (event.keyCode === 13) {
+          document.getElementById("id_button").click();
+      }
+    });
+
+  /**
+    * Load more results, `N` at a time.
+    * @param {int} N
+    */
+    function showResults(N=10) {
+
+      if (N == 0) {
+        resultPlaceholder.innerHTML = '';
+      // Keep showing results until none left.
+      } else if (resultCounter < res_json.length) {
+
+        // Next block of results to display.
+        let next_block = res_json.slice(resultCounter, resultCounter + N)
+
+        resultPlaceholder.innerHTML += resultTemplate(next_block);
+
+        resultCounter += N
+      }
+    }
+
+  /**
+    * Detect when window scroll to bottom.
+    */
+    window.onscroll = function() {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        showResults(5);
+        }
+    };
+
+
+  /**
+    * Get `artist` results
+    */
+    function getResults() {
+      var xhttp = new XMLHttpRequest();
+      var params = "artist=" + document.getElementById("artist").value;
+
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+          // Reset counter, display total, and grab results.
+          resultCounter = 0;
+          res_json = JSON.parse(this.responseText)['artists']['items'];
+          document.getElementById('total').innerHTML = res_json.length + ' results'
+
+          // Check for results.
+          if (res_json.length > 0) {
+            showResults(5);
+          } else {
+            showResults(0);
+          }
+        }
+      };
+
+      xhttp.open("POST", "{{ url_for('search') }}", true);
+      xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhttp.send(params);
+    }
+
+    // Expose to global.
+    window.getResults = getResults;
+
+  })();
+</script>
+{% endblock %}
