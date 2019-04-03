@@ -15,8 +15,8 @@ refreshes the access token.
 The *client credentials flow* example includes a search function that
 lists artist information from Spotify.
 
-Beforehand
-----------
+Registration
+------------
 - `Register`__ your application with ``http://127.0.0.1:5000/callback`` as the redirect URI to obtain an application key and secret.
 
 __ https://developer.spotify.com/documentation/general/guides/app-settings/#register-your-app
@@ -46,7 +46,6 @@ Setup
 		Any randomized string for Flask session purposes. If unsure, just copy the output of this::
 
 		$ python -c 'import os; print(os.urandom(16))'
-
 
 	You can use `python-dotenv`__, `pipenv`__, `virtualenv or bash`__ to set the environment variables.
 
