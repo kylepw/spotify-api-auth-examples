@@ -15,6 +15,9 @@ refreshes the access token.
 The *client credentials flow* example includes a search function that
 lists artist information from Spotify.
 
+.. image:: screenshots/search.png
+	:width: 80%
+
 For details on authorization flows, see `Spotify's Authorization Guide`__
 
 __ https://developer.spotify.com/documentation/general/guides/authorization-guide/
