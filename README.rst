@@ -15,6 +15,10 @@ refreshes the access token.
 The *client credentials flow* example includes a search function that
 lists artist information from Spotify.
 
+For details on authorization flows, see `Spotify's Authorization Guide`__
+
+__ https://developer.spotify.com/documentation/general/guides/authorization-guide/
+
 Registration
 ------------
 - `Register`__ your application with ``http://127.0.0.1:5000/callback`` as the redirect URI to obtain an application key and secret.
