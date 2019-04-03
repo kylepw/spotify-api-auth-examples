@@ -1,6 +1,0 @@
-# Spotify-Flask Example App
-FLASK_APP=app.py
-CLIENT_ID=''
-CLIENT_SECRET=''
-REDIRECT_URI='http://127.0.0.1:5000/callback'
-SECRET_KEY='SOMERANDOMVALUE'
