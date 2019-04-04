@@ -5,7 +5,7 @@
 <!-- Response Data -->
 <div id="profile" class="media">
   {% if data.images %}
-  <div class="mr-5">
+  <div class="mr-4">
     <img class="media-object" width="150" src="{{ data.images.0.url }}"/>
   </div>
   {% endif %}
@@ -16,8 +16,7 @@
       <dt>Email</dt><dd>{{ data.email }}</dd>
       <dt>Country</dt><dd>{{ data.country }}</dd>
       <dt>Followers</dt><dd>{{ data.followers.total }}</dd>
-      <dt>Product</dt><dd>{{ data.product }}</dd>
-      <dt>Url</dt><dd><a href="{{ data.href }}">{{ data.href }}</a></dd>
+      <dt>Account Type</dt><dd>{{ data.product }}</dd>
       <dt>Spotify Url</dt><dd><a href="{{ data.external_urls.spotify }}">{{ data.external_urls.spotify }}</a></dd>
       <dt>URI</dt><dd><a href="{{ data.uri }}">{{ data.uri }}</a></dd>
     </dl>
