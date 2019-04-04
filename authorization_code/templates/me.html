@@ -12,9 +12,14 @@
   <div class="media-body">
     <h1>Logged in as <i>{{ data.display_name }}</i></h1>
     <dl class="dl-horizontal">
-    {% for key, value in data.items() %}
-      <dt>{{ key }}</dt><dd>{{ value }}</dd>
-    {% endfor %}
+      <dt>Id</dt><dd>{{ data.id }}</dd>
+      <dt>Email</dt><dd>{{ data.email }}</dd>
+      <dt>Country</dt><dd>{{ data.country }}</dd>
+      <dt>Followers</dt><dd>{{ data.followers.total }}</dd>
+      <dt>Product</dt><dd>{{ data.product }}</dd>
+      <dt>Url</dt><dd><a href="{{ data.href }}">{{ data.href }}</a></dd>
+      <dt>Spotify Url</dt><dd><a href="{{ data.external_urls.spotify }}">{{ data.external_urls.spotify }}</a></dd>
+      <dt>URI</dt><dd><a href="{{ data.uri }}">{{ data.uri }}</a></dd>
     </dl>
   </div>
 </div>
