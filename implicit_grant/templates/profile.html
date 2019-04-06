@@ -16,18 +16,18 @@ https://github.com/spotify/web-api-auth-examples
 <script id="user-profile-template" type="text/x-handlebars-template">
   <h2>Logged in as {{display_name}}</h2>
   <div class="media">
-    <div class="mr-5">
+    <div class="mr-4">
       <img class="media-object" width="150" src="{{images.0.url}}" />
     </div>
     <div class="media-body">
       <dl class="dl-horizontal">
-        <dt>Display name</dt><dd>{{display_name}}</dd>
-        <dt>Id</dt><dd>{{id}}</dd>
-        <dt>Email</dt><dd>{{email}}</dd>
-        <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
-        <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
-        <dt>Profile Image</dt><dd><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
-        <dt>Country</dt><dd>{{country}}</dd>
+          <dt>Id</dt><dd>{{id}}</dd>
+          <dt>Email</dt><dd>{{email}}</dd>
+          <dt>Country</dt><dd>{{country}}</dd>
+          <dt>Followers</dt><dd>{{followers.total}}</dd>
+          <dt>Account Type</dt><dd>{{ product }}</dd>
+          <dt>Spotify Link</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
+          <dt>URI</dt><dd><a href="{{ data.uri }}">{{uri}}</a></dd>
       </dl>
     </div>
   </div>
@@ -36,7 +36,7 @@ https://github.com/spotify/web-api-auth-examples
 
 {% raw %}
 <script id="oauth-template" type="text/x-handlebars-template">
-  <h3>oAuth info</h3>
+  <h3>Token Information</h3>
   <dl class="dl-horizontal">
     <dt>Access token</dt><dd class="text-truncate">{{access_token}}</dd>
   </dl>

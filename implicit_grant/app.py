@@ -66,15 +66,16 @@ def auth():
     )
 
     # Request authorization from user
+    # Only including `state` here for error logging purposes.
     payload = {
         'client_id': CLIENT_ID,
         'response_type': 'token',
         'redirect_uri': REDIRECT_URI,
         'scope': 'user-read-private user-read-email',
+        'state': state,
     }
 
     res = make_response(redirect(f'{AUTH_URL}/?{urlencode(payload)}'))
-    res.set_cookie('spotify_auth_state', state)
 
     return res
 
