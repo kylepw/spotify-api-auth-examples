@@ -5,8 +5,8 @@ click==7.0
 flask==1.0.2
 idna==2.8
 itsdangerous==1.1.0
-jinja2==2.10
+jinja2==2.10.1
 markupsafe==1.1.1
 requests==2.21.0
 urllib3==1.24.1
-werkzeug==0.15.1
+werkzeug==0.15.2
