@@ -74,10 +74,11 @@
     */
     function showResults(N=10) {
 
-      if (N == 0) {
-        resultPlaceholder.innerHTML = '';
+      // Start with blank page.
+      resultPlaceholder.innerHTML = '';
+
       // Keep showing results until none left.
-      } else if (resultCounter < res_json.length) {
+      if (resultCounter < res_json.length) {
 
         // Next block of results to display.
         let next_block = res_json.slice(resultCounter, resultCounter + N)
