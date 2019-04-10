@@ -18,7 +18,6 @@ More info:
 
 '''
 
-from base64 import b64encode
 from flask import abort, Flask, redirect, render_template, request, session, url_for
 import json
 import logging
@@ -34,7 +33,6 @@ logging.basicConfig(
 # Client info
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
-CLIENT_HEADER = b'Basic ' + b64encode((CLIENT_ID + ':' + CLIENT_SECRET).encode())
 
 # Spotify API endpoints
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
@@ -61,9 +59,11 @@ def auth():
         'Content-Type': 'application/x-www-form-urlencoded',
         'grant_type': 'client_credentials',
     }
-    headers = {'Authorization': CLIENT_HEADER}
 
-    res = requests.post(TOKEN_URL, data=payload, headers=headers)
+    # `auth=(CLIENT_ID, SECRET)` basically wraps an 'Authorization'
+    # header with value:
+    # b'Basic ' + b64encode((CLIENT_ID + ':' + SECRET).encode())
+    res = requests.post(TOKEN_URL, auth=(CLIENT_ID, CLIENT_SECRET), data=payload)
     res_data = res.json()
 
     access_token = res_data.get('access_token')

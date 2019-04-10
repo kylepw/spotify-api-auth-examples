@@ -18,7 +18,6 @@ More info:
 
 '''
 
-from base64 import b64encode
 from flask import (
     abort,
     Flask,
@@ -46,7 +45,6 @@ logging.basicConfig(
 # Client info
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
-CLIENT_HEADER = b'Basic ' + b64encode((CLIENT_ID + ':' + CLIENT_SECRET).encode())
 REDIRECT_URI = os.getenv('REDIRECT_URI')
 
 
@@ -130,9 +128,11 @@ def callback():
         'code': code,
         'redirect_uri': REDIRECT_URI,
     }
-    headers = {'Authorization': CLIENT_HEADER}
 
-    res = requests.post(TOKEN_URL, data=payload, headers=headers)
+    # `auth=(CLIENT_ID, SECRET)` basically wraps an 'Authorization'
+    # header with value:
+    # b'Basic ' + b64encode((CLIENT_ID + ':' + SECRET).encode())
+    res = requests.post(TOKEN_URL, auth=(CLIENT_ID, CLIENT_SECRET), data=payload)
     res_data = res.json()
 
     if res_data.get('error') or res.status_code != 200:
@@ -159,12 +159,11 @@ def refresh():
         'grant_type': 'refresh_token',
         'refresh_token': session.get('tokens').get('refresh_token'),
     }
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': CLIENT_HEADER,
-    }
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
-    res = requests.post(TOKEN_URL, data=payload, headers=headers)
+    res = requests.post(
+        TOKEN_URL, auth=(CLIENT_ID, CLIENT_SECRET), data=payload, headers=headers
+    )
     res_data = res.json()
 
     # Load new token into session
